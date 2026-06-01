@@ -1,6 +1,7 @@
 # nftables-autocomplete
 
-Shell completions para `nft` (nftables). Para cuando no tienes ni idea de qué comando usar — presionas `Tab` y la terminal te ayuda.
+Shell completions + helper interactivo para `nft` (nftables).  
+Presiona `Tab` para autocompletar comandos, o corre `nft-helper` para ver una guía interactiva completa basada en [NFTABLES-Examn](https://github.com/davestinhast/NFTABLES-Examn).
 
 Soporta **bash**, **zsh** y **fish**.
 
@@ -15,6 +16,34 @@ sudo bash install.sh     # instala de forma global (todos los usuarios)
 ```
 
 Recarga tu shell y listo. Escribe `nft ` y presiona `Tab`.
+
+---
+
+## nft-helper — Ayuda interactiva
+
+Un menú interactivo con toda la guía de tu repo [NFTABLES-Examn](https://github.com/davestinhast/NFTABLES-Examn).
+
+```bash
+# Instalar el helper
+sudo cp nft-helper /usr/local/bin/nft-helper
+sudo chmod +x /usr/local/bin/nft-helper
+
+# Correrlo
+nft-helper
+```
+
+Muestra un menú con 15 temas. Seleccionas el que quieres y te muestra los comandos con ejemplos.
+
+**Modo offline** (recomendado): clona tu repo de guía primero y el helper lo detecta solo:
+```bash
+git clone https://github.com/davestinhast/NFTABLES-Examn ~/NFTABLES-Examn
+```
+
+**Modo online**: si no tienes el repo local, descarga el contenido de GitHub al vuelo.
+
+**Dependencias opcionales** (mejoran la experiencia visual):
+- `fzf` — menú con búsqueda fuzzy (en Kali: `sudo apt install fzf`)
+- `bat` / `batcat` — resaltado de sintaxis (en Kali: `sudo apt install bat`)
 
 ---
 
