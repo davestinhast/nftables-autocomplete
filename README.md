@@ -1,107 +1,101 @@
 # nftables-autocomplete
 
-Shell completions + helper interactivo para `nft` (nftables).  
-Presiona `Tab` para autocompletar comandos, o corre `nft-helper` para ver una guía interactiva completa basada en [NFTABLES-Examn](https://github.com/davestinhast/NFTABLES-Examn).
+Dos herramientas para trabajar con nftables en Kali Linux (o cualquier distro Debian):
 
-Soporta **bash**, **zsh** y **fish**.
+- **nft-helper** — guia interactiva con 16 temas, todo embebido, sin internet
+- **completions** — autocompletado con Tab para bash, zsh y fish
 
-## Instalación rápida
+---
+
+## Instalacion — paso a paso
+
+### 1. Clonar el repositorio
 
 ```bash
 git clone https://github.com/davestinhast/nftables-autocomplete
 cd nftables-autocomplete
-bash install.sh          # instala para tu usuario
-# o
-sudo bash install.sh     # instala de forma global (todos los usuarios)
 ```
 
-Recarga tu shell y listo. Escribe `nft ` y presiona `Tab`.
-
----
-
-## nft-helper — Ayuda interactiva
-
-Un menú interactivo con toda la guía de tu repo [NFTABLES-Examn](https://github.com/davestinhast/NFTABLES-Examn).
+### 2. Instalar nft-helper
 
 ```bash
-# Instalar el helper
 sudo cp nft-helper /usr/local/bin/nft-helper
 sudo chmod +x /usr/local/bin/nft-helper
-
-# Correrlo
-nft-helper
 ```
 
-Muestra un menú con 15 temas. Seleccionas el que quieres y te muestra los comandos con ejemplos.
-
-**Modo offline** (recomendado): clona tu repo de guía primero y el helper lo detecta solo:
-```bash
-git clone https://github.com/davestinhast/NFTABLES-Examn ~/NFTABLES-Examn
-```
-
-**Modo online**: si no tienes el repo local, descarga el contenido de GitHub al vuelo.
-
-**Dependencias opcionales** (mejoran la experiencia visual):
-- `fzf` — menú con búsqueda fuzzy (en Kali: `sudo apt install fzf`)
-- `bat` / `batcat` — resaltado de sintaxis (en Kali: `sudo apt install bat`)
-
----
-
-## Instalación manual
-
-### Bash
-
-```bash
-# Para tu usuario:
-cp completions/nft.bash ~/.local/share/bash-completion/completions/nft
-
-# Global (requiere root):
-sudo cp completions/nft.bash /etc/bash_completion.d/nft
-```
-
-Agrega a `~/.bashrc` si instalaste por usuario:
-```bash
-source ~/.local/share/bash-completion/completions/nft
-```
-
-### Zsh
+### 3. Instalar el autocompletado (zsh — default en Kali)
 
 ```bash
 mkdir -p ~/.zsh/completions
 cp completions/nft.zsh ~/.zsh/completions/_nft
 ```
 
-Agrega a `~/.zshrc`:
-```zsh
+Luego agregar al final de `~/.zshrc` si no esta ya:
+
+```bash
 fpath=(~/.zsh/completions $fpath)
 autoload -Uz compinit && compinit
 ```
 
-### Fish
+Recargar:
+
+```bash
+source ~/.zshrc
+```
+
+### 3b. Si usas bash en lugar de zsh
+
+```bash
+sudo cp completions/nft.bash /etc/bash_completion.d/nft
+source ~/.bashrc
+```
+
+### 3c. Si usas fish
 
 ```bash
 cp completions/nft.fish ~/.config/fish/completions/nft.fish
 ```
 
-Se activa solo.
+---
+
+## Uso
+
+### nft-helper — guia interactiva
+
+```bash
+nft-helper
+```
+
+Muestra un menu numerado con 16 temas. Escribes el numero y te muestra los comandos con ejemplos.
+
+Para ir directo a un tema sin pasar por el menu:
+
+```bash
+nft-helper 1    # Instalacion y servicio
+nft-helper 2    # Ver y borrar reglas
+nft-helper 3    # Tablas y cadenas
+nft-helper 4    # Reglas de firewall (SSH, HTTP, IPs, ping)
+nft-helper 5    # Sets y lista negra de IPs
+nft-helper 6    # Guardar la configuracion
+nft-helper 7    # Firewall stateful con conntrack
+nft-helper 8    # Cadenas OUTPUT y FORWARD
+nft-helper 9    # REJECT vs DROP y logging
+nft-helper 10   # NAT — DNAT, SNAT y Masquerade
+nft-helper 11   # Puertos multiples, rangos y CIDR
+nft-helper 12   # IPv6
+nft-helper 13   # Contadores y monitoreo
+nft-helper 14   # Familias, hooks y prioridades
+nft-helper 15   # Ruleset completo de ejemplo
+nft-helper 16   # Referencia rapida — comandos esenciales
+```
+
+No necesita internet. Todo el contenido esta embebido dentro del script.
 
 ---
 
-## Qué autocompleta
+### Autocompletado con Tab
 
-| Completa | Ejemplos |
-|---|---|
-| Comandos principales | `add`, `list`, `flush`, `delete`, `monitor`... |
-| Tipos de objeto | `table`, `chain`, `rule`, `set`, `map`, `flowtable`... |
-| Familias de protocolos | `ip`, `ip6`, `inet`, `arp`, `bridge`, `netdev` |
-| Subcomandos de `list` | `tables`, `chains`, `ruleset`, `sets`... |
-| Subcomandos de `flush` | `ruleset`, `table`, `chain`... |
-| Flags globales | `-f`, `-j`, `-a`, `-n`, `-s`... |
-| Tablas/chains existentes | Consulta tu ruleset actual en tiempo real |
-
----
-
-## Ejemplos de uso
+Una vez instalado, escribe `nft` seguido de espacio y presiona Tab:
 
 ```bash
 nft <Tab>
@@ -122,34 +116,25 @@ nft flush <Tab>
 
 ---
 
-## Comandos nft más usados (referencia rápida)
+## Contenido de nft-helper
 
-```bash
-# Ver todo el ruleset actual
-nft list ruleset
+Basado en [NFTABLES-Examn](https://github.com/davestinhast/NFTABLES-Examn).
 
-# Crear tabla
-nft add table inet mi_firewall
-
-# Crear chain de input
-nft add chain inet mi_firewall input { type filter hook input priority 0 \; policy drop \; }
-
-# Permitir loopback y conexiones establecidas
-nft add rule inet mi_firewall input iif lo accept
-nft add rule inet mi_firewall input ct state established,related accept
-
-# Permitir SSH
-nft add rule inet mi_firewall input tcp dport 22 accept
-
-# Bloquear IP específica
-nft add rule inet mi_firewall input ip saddr 1.2.3.4 drop
-
-# Guardar reglas
-nft list ruleset > /etc/nftables.conf
-
-# Cargar reglas desde archivo
-nft -f /etc/nftables.conf
-
-# Limpiar TODO (cuidado)
-nft flush ruleset
-```
+| Tema | Que cubre |
+|------|-----------|
+| 1 | Instalacion, apt install, systemctl start/enable/status |
+| 2 | list ruleset, flush, delete por handle, nano, nft -f |
+| 3 | add table, add chain, policy drop vs accept |
+| 4 | Loopback, SSH, HTTP, HTTPS, bloquear IP, ping, rate limit |
+| 5 | Sets, lista negra, add element, @blacklist |
+| 6 | Persistencia, guardar en /etc/nftables.conf, systemctl enable |
+| 7 | conntrack, ct state, established, invalid, configuracion completa |
+| 8 | Cadenas output y forward, iif/oif, router/gateway |
+| 9 | drop vs reject, logging, prefijos, journalctl |
+| 10 | NAT, tabla nat, DNAT, SNAT, masquerade, ip_forward |
+| 11 | Varios puertos {}, rangos 80-90, CIDR /24, interval sets |
+| 12 | IPv6, familia ip6, ICMPv6, inet para los dos juntos |
+| 13 | counter, nft monitor, cuotas, ip link show |
+| 14 | Familias, tipos de cadena, hooks, prioridades, tabla resumen |
+| 15 | Archivo completo funcional con filter + NAT |
+| 16 | Referencia rapida de los comandos mas usados |
