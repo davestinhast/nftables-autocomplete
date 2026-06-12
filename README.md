@@ -5,7 +5,6 @@ Dos herramientas para trabajar con nftables en Kali Linux (o cualquier distro De
 - **nft-helper** — guia interactiva con 16 temas, todo embebido, sin internet
 - **completions** — autocompletado con Tab para bash, zsh y fish
 
----
 
 ## Instalacion — paso a paso
 
@@ -56,7 +55,6 @@ source ~/.bashrc
 cp completions/nft.fish ~/.config/fish/completions/nft.fish
 ```
 
----
 
 ## Uso
 
@@ -91,7 +89,6 @@ nft-helper 16   # Referencia rapida — comandos esenciales
 
 No necesita internet. Todo el contenido esta embebido dentro del script.
 
----
 
 ### Autocompletado con Tab
 
@@ -114,7 +111,6 @@ nft flush <Tab>
 # → chain  map  ruleset  set  table
 ```
 
----
 
 ## Contenido de nft-helper
 
